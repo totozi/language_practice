@@ -2,7 +2,8 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>한국어 - 영어 말하기 연습</title>
+    <title>한국어 - 영어 말하기 연습 (엑셀)</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -25,16 +26,20 @@
     <div id="content"></div>
 
     <script>
-        async function loadText() {
-            const response = await fetch('sentences.txt'); // 파일 이름
-            const text = await response.text();
-            const lines = text.split('\n');
+        async function loadExcel() {
+            const response = await fetch('sentences.xlsx');
+            const arrayBuffer = await response.arrayBuffer();
+            const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+
+            const sheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[sheetName];
+            const rows = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
 
             const contentDiv = document.getElementById('content');
 
-            lines.forEach(line => {
-                if (line.trim() === '') return;
-                const [korean, english] = line.split('\t');
+            rows.forEach(row => {
+                const [korean, english] = row;
+                if (!korean || !english) return;
 
                 const div = document.createElement('div');
                 div.className = 'sentence';
@@ -44,14 +49,15 @@
 
                 const button = document.createElement('button');
                 button.textContent = '영어 보기';
-                button.onclick = () => {
-                    engSpan.style.display = 'inline';
-                    button.style.display = 'none';
-                };
 
                 const engSpan = document.createElement('span');
                 engSpan.textContent = english;
                 engSpan.className = 'english';
+
+                button.onclick = () => {
+                    engSpan.style.display = 'inline';
+                    button.style.display = 'none';
+                };
 
                 div.appendChild(korSpan);
                 div.appendChild(button);
@@ -61,7 +67,7 @@
             });
         }
 
-        loadText();
+        loadExcel();
     </script>
 </body>
 </html>
