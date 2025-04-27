@@ -27,7 +27,7 @@
 
     <script>
         async function loadExcel() {
-            const response = await fetch('sentences.xlsx');
+            const response = await fetch('preposition.xlsx');
             const arrayBuffer = await response.arrayBuffer();
             const workbook = XLSX.read(arrayBuffer, { type: 'array' });
 
@@ -48,10 +48,11 @@
                 korSpan.textContent = korean;
 
                 const button = document.createElement('button');
-                button.textContent = '영어 보기';
+                button.textContent = '영어';
 
                 const engSpan = document.createElement('span');
-                engSpan.textContent = english;
+                engSpan.textContent = ' : ' + english;
+                
                 engSpan.className = 'english';
 
                 button.onclick = () => {
