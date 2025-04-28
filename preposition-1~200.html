@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>preposition1~200</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .sentence {
+            margin-bottom: 20px;
+        }
+        .english {
+            display: none;
+            margin-top: 5px;
+        }
+        button {
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h3>preposition1~200</h3>
+    <div id="content"></div>
+
+    <script>
+        async function loadExcel() {
+            const response = await fetch('preposition-1~200.xlsx');
+            const arrayBuffer = await response.arrayBuffer();
+            const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+
+            const sheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[sheetName];
+            const rows = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+            const contentDiv = document.getElementById('content');
+
+            rows.forEach(row => {
+                const [korean, english] = row;
+                if (!korean || !english) return;
+
+                const div = document.createElement('div');
+                div.className = 'sentence';
+
+                const korSpan = document.createElement('span');
+                korSpan.textContent = korean;
+
+                const button = document.createElement('button');
+                button.textContent = '영어';
+
+                const engSpan = document.createElement('span');
+                engSpan.textContent = ' : ' + english;
+                
+                engSpan.className = 'english';
+
+                button.onclick = () => {
+                    engSpan.style.display = 'inline';
+                    button.style.display = 'none';
+                };
+
+                div.appendChild(korSpan);
+                div.appendChild(button);
+                div.appendChild(engSpan);
+
+                contentDiv.appendChild(div);
+            });
+        }
+
+        loadExcel();
+    </script>
+</body>
+</html>
