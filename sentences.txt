@@ -1,5 +1,0 @@
-안녕하세요.\tHello.
-오늘 날씨가 좋네요.\tThe weather is nice today.
-당신의 이름은 무엇인가요?\tWhat is your name?
-저는 한국에서 왔어요.\tI am from Korea.
-이것은 얼마인가요?\tHow much is this?
